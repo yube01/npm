@@ -1,6 +1,6 @@
 {
   "name": "image-slider-yube",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A customizable image slider component for React.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
