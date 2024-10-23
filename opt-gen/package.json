@@ -1,0 +1,13 @@
+{
+  "name": "otp-generator-yube",
+  "version": "1.0.0",
+  "description": "A simple and customizable OTP generator.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": ["otp", "generator", "one-time-password", "npm-package"],
+  "author": "Yubraj",
+  "license": "MIT"
+}
