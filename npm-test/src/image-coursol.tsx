@@ -7,16 +7,17 @@ interface TrustedProps {
 const Trusted: React.FC<TrustedProps> = ({ images }) => {
   return (
     <div className="flex flex-col items-center space-y-8">
-      <h1 className="text-center text-4xl font-semibold">Trusted by</h1>
+      {/* Wrapper for the scrolling images */}
       <div className="w-[1200px] overflow-hidden relative mask-gradient">
-        <div className="flex animate-scrollX space-x-8">
+        <div className="flex space-x-8 animate-scrollX">
+          {/* First set of images */}
           {images.map((el, index) => (
             <ImageGroup key={index}>
               <img src={el} alt={`Trusted-${index}`} className="image" />
             </ImageGroup>
           ))}
-        </div>
-        <div className="flex animate-scrollX space-x-8">
+
+          {/* Duplicate set of images for seamless looping */}
           {images.map((el, index) => (
             <ImageGroup key={`copy-${index}`}>
               <img src={el} alt={`Trusted-copy-${index}`} className="image" />

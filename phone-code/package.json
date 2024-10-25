@@ -1,7 +1,7 @@
 {
-  "name": "loop-image-slider-yube",
+  "name": "country-phone-code-yube",
   "version": "1.0.0",
-  "description": "A customizable image loop for react.",
+  "description": "A customizable country phone code component for React.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -21,10 +21,9 @@
   },
   "keywords": [
     "react",
-    "image",
-    "slider",
-    "loop",
-    "icon-loop",
+    "phone",
+    "country",
+    "country-code",
     "component"
   ],
   "author": "Yubraj",

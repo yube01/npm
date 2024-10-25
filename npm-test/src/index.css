@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -70,21 +72,20 @@ h1 {
     );
   }
 
-  @keyframes scrollX {
-    0% {
-      transform: translateX(0);
-    }
-    50% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(0);
-    }
+/* Infinite horizontal scroll animation */
+@keyframes scrollX {
+  0% {
+    transform: translateX(0);
   }
+  100% {
+    transform: translateX(-100%);
+  }
+}
 
-  .animate-scrollX {
-    animation: scrollX 100s linear infinite;
-  }
+/* Apply animation to the flex container */
+.animate-scrollX {
+  animation: scrollX 20s linear infinite;
+}
 
   .image {
     object-fit: contain;
