@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
 import { countries } from './countries'; // Import your countries data
 
-const CountrySelect: React.FC = () => {
-  const [selectedCountry, setSelectedCountry] = useState(countries[0]);
+interface Country {
+  code: string;
+  name: string;
+  phone: string;
+}
+
+interface CountryPhoneCodeProps {
+  onSelectCountry: (country: Country) => void; // Callback to pass selected country data
+}
+
+const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) => {
+  const [selectedCountry, setSelectedCountry] = useState<Country>(countries[0]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleCountrySelect = (country: typeof countries[0]) => {
+  const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country);
+    onSelectCountry(country); // Call the callback function with selected data
     setIsOpen(false);
   };
 
@@ -29,7 +40,7 @@ const CountrySelect: React.FC = () => {
       </div>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-full border rounded shadow-lg">
+        <div className="absolute z-10 mt-1 w-full border rounded shadow-lg h-80 overflow-y-scroll bg-black">
           {countries.map((country) => (
             <div
               key={country.code}
@@ -51,4 +62,4 @@ const CountrySelect: React.FC = () => {
   );
 };
 
-export default CountrySelect;
+export default CountryPhoneCode;
