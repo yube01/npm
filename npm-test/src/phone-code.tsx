@@ -1,5 +1,5 @@
 // CountryPhoneCode.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { countries } from './data/countries'; // Import your countries data
 
 interface Country {
@@ -15,6 +15,10 @@ interface CountryPhoneCodeProps {
 const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) => {
   const [selectedCountry, setSelectedCountry] = useState<Country>(countries[0]);
   const [isOpen, setIsOpen] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [phoneNumber, setPhoneNumber] = useState<string>('');
 
@@ -32,6 +36,22 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) 
       setPhoneNumber(input);
     }
   };
+  // Updated filtering logic: match by name or code
+  const filteredCountries = useMemo(() => {
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return countries.filter(
+      (country) =>
+        country.name.toLowerCase().startsWith(lowerSearchTerm) ||
+        country.code.toLowerCase().startsWith(lowerSearchTerm)
+    );
+  }, [searchTerm]);
+
+  // Focus the input field when the dropdown opens
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]);
 
   return (
     <div className="relative">
@@ -55,8 +75,9 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) 
           <span>{isOpen ? '▲' : '▼'}</span>
 
           <div className=' flex items-center'>
-          <span className=' w-32'>({selectedCountry.phone})</span>
+            <span className=' w-32'>({selectedCountry.phone})</span>
             <input
+
               type="text"
               value={phoneNumber}
               onChange={handlePhoneNumberChange}
@@ -69,21 +90,38 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) 
 
         {isOpen && (
           <div className="absolute z-10 mt-1 w-full border rounded shadow-lg h-80 overflow-y-scroll bg-black">
-            {countries.map((country) => (
-              <div
-                key={country.code}
-                className="flex items-center p-2 cursor-pointer hover:bg-gray-900"
-                onClick={() => handleCountrySelect(country)}
-              >
-                <img
-                  src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
-                  alt={`${country.name} flag`}
-                  width={30}
-                  className="mr-2"
-                />
-                <span>{country.name} ({country.phone})</span>
-              </div>
-            ))}
+            {/* Search Input */}
+            <div className="p-2">
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder="Search country"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)} // Update search term
+                className="w-full p-2 border rounded bg-transparent text-white outline-none"
+              />
+            </div>
+
+            {/* Filtered Country List */}
+            {filteredCountries.length > 0 ? (
+              filteredCountries.map((country) => (
+                <div
+                  key={country.code}
+                  className="flex items-center p-2 cursor-pointer hover:bg-gray-900"
+                  onClick={() => handleCountrySelect(country)}
+                >
+                  <img
+                    src={`https://flagcdn.com/w40/${country.code.toLowerCase()}.png`}
+                    alt={`${country.name} flag`}
+                    width={30}
+                    className="mr-2"
+                  />
+                  <span>{country.name} ({country.phone})</span>
+                </div>
+              ))
+            ) : (
+              <div className="p-2 text-gray-500">No matching countries found</div>
+            )}
           </div>
         )}
 
