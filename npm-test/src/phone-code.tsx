@@ -1,18 +1,21 @@
 // CountryPhoneCode.tsx
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { countries } from './data/countries'; // Import your countries data
 
 interface Country {
   code: string;
   name: string;
   phone: string;
+
 }
 
 interface CountryPhoneCodeProps {
   onSelectCountry: (country: Country) => void; // Callback to pass selected country data
+  phoneNumber: string;
+  onPhoneNumberChange: (phone: string) => void;
 }
 
-const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) => {
+const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry, phoneNumber, onPhoneNumberChange }) => {
   const [selectedCountry, setSelectedCountry] = useState<Country>(countries[0]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,7 +23,7 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) 
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
+
 
   const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country);
@@ -28,23 +31,19 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) 
     setIsOpen(false);
   };
 
-  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const filteredCountries = countries.filter((country) =>
+    country.name.toLowerCase().startsWith(searchTerm.toLowerCase()) || country.code.toLowerCase().startsWith(searchTerm.toLowerCase())
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
 
-    // Ensure only numeric values are entered
-    if (/^\d*$/.test(input)) {
-      setPhoneNumber(input);
+    // Allow only digits and ensure the length is at most 10
+    if (/^\d{0,10}$/.test(input)) {
+      onPhoneNumberChange(input); // Update parent state dynamically
     }
   };
-  // Updated filtering logic: match by name or code
-  const filteredCountries = useMemo(() => {
-    const lowerSearchTerm = searchTerm.toLowerCase();
-    return countries.filter(
-      (country) =>
-        country.name.toLowerCase().startsWith(lowerSearchTerm) ||
-        country.code.toLowerCase().startsWith(lowerSearchTerm)
-    );
-  }, [searchTerm]);
 
   // Focus the input field when the dropdown opens
   useEffect(() => {
@@ -55,12 +54,11 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) 
 
   return (
     <div className="relative">
-      <div className=''>
+      <div>
         <div
-          className="flex items-center justify-between p-1 border rounded cursor-pointer"
-          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center justify-between p-1 rounded cursor-pointer gap-5"
         >
-          <div>
+          <div onClick={() => setIsOpen(!isOpen)} className=' border flex justify-center items-center p-2 h-14 rounded-md'>
             <div className="flex items-center w-60">
               <img
                 src={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png`}
@@ -70,17 +68,17 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) 
               />
               <span>{selectedCountry.name}</span>
             </div>
-
+            <span>{isOpen ? '▲' : '▼'}</span>
           </div>
-          <span>{isOpen ? '▲' : '▼'}</span>
 
-          <div className=' flex items-center'>
+
+          <div className=' flex items-center border p-2 h-14 rounded-md'>
             <span className=' w-32'>({selectedCountry.phone})</span>
             <input
 
               type="text"
               value={phoneNumber}
-              onChange={handlePhoneNumberChange}
+              onChange={handleInputChange}
               placeholder="Enter phone number"
               className="w-full p-1 bg-transparent outline-none"
             />
@@ -89,7 +87,7 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) 
         </div>
 
         {isOpen && (
-          <div className="absolute z-10 mt-1 w-full border rounded shadow-lg h-80 overflow-y-scroll bg-black">
+          <div className="absolute z-10 mt-1 w-72 border rounded shadow-lg h-80 overflow-y-scroll bg-black">
             {/* Search Input */}
             <div className="p-2">
               <input
@@ -126,14 +124,6 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry }) 
         )}
 
       </div>
-      {phoneNumber && (
-        <div className="mt-4 text-sm">
-          <p>
-            <strong>Full Number:</strong>{' '}
-            {selectedCountry?.phone} {phoneNumber}
-          </p>
-        </div>
-      )}
     </div>
   );
 };
