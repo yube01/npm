@@ -1,6 +1,6 @@
 
+import { CountryPhoneCode } from 'country-phone-code-yube';
 import React, { useState } from 'react';
-import CountryPhoneCode from './phone-code';
 
 // import Trusted from './image-coursol';
 
