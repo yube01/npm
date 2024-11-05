@@ -35,7 +35,9 @@ const App: React.FC = () => {
       <CountryPhoneCode
         phoneNumber={phoneNumber}
         onPhoneNumberChange={handlePhoneNumberChange}
-        onSelectCountry={handleCountrySelection} />
+        onSelectCountry={handleCountrySelection}
+        bgColor='bg-black' 
+        />
 
       {selectedCountry && (
         <div className="mt-4">

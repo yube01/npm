@@ -10,12 +10,14 @@ interface Country {
 }
 
 interface CountryPhoneCodeProps {
+  bgColor?:string
   onSelectCountry: (country: Country) => void; // Callback to pass selected country data
   phoneNumber: string;
   onPhoneNumberChange: (phone: string) => void;
+
 }
 
-const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry, phoneNumber, onPhoneNumberChange }) => {
+const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry, phoneNumber, onPhoneNumberChange,bgColor="bg-black"}) => {
   const [selectedCountry, setSelectedCountry] = useState<Country>(countries[0]);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -58,7 +60,7 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry, ph
         <div
           className="flex items-center justify-between p-1 rounded cursor-pointer gap-5"
         >
-          <div onClick={() => setIsOpen(!isOpen)} className=' border flex justify-center items-center p-2 h-14 rounded-md'>
+          <div onClick={() => setIsOpen(!isOpen)} className={` border flex justify-center items-center p-2 h-14 rounded-md ${bgColor}`}>
             <div className="flex items-center w-60">
               <img
                 src={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png`}
@@ -72,7 +74,7 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry, ph
           </div>
 
 
-          <div className=' flex items-center border p-2 h-14 rounded-md'>
+          <div className={`flex items-center border p-2 h-14 rounded-md ${bgColor}`}>
             <span className=' w-32'>({selectedCountry.phone})</span>
             <input
 
@@ -87,7 +89,7 @@ const CountryPhoneCode: React.FC<CountryPhoneCodeProps> = ({ onSelectCountry, ph
         </div>
 
         {isOpen && (
-          <div className="absolute z-10 mt-1 w-72 border rounded shadow-lg h-80 overflow-y-scroll bg-black">
+          <div className={`absolute z-10 mt-1 w-72 border rounded shadow-lg h-80 overflow-y-scroll  ${bgColor}`}>
             {/* Search Input */}
             <div className="p-2">
               <input
